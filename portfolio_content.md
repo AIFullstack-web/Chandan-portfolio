@@ -102,3 +102,5 @@ Edit `portfolio-evidence.json` to add or change a project highlight. Each highli
 Add verified certificates to the `certificates` array with `title`, `issuer`, `date`, and a public verification `url`. The array is empty until a real certificate is available; do not add placeholders or unverified claims.
 
 This static portfolio has no publishing backend. Changes to the JSON file appear on the website after the updated files are deployed.
+
+The portfolio links to separate, role-focused printable resumes (`developer-resume.html` and `qa-resume.html`). Update project evidence and learning-focus labels there only when the corresponding facts are verified. Each page can be printed or saved as PDF from the browser.

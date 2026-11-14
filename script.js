@@ -91,6 +91,7 @@ const aiProjects = [
 
 const portfolioProfiles = {
     tester: {
+        resumeUrl: "qa-resume.html",
         eyebrow: "QA AUTOMATION TESTER · EARLY CAREER",
         heroTitle: "I build confidence in software, <span>one thoughtful test at a time.</span>",
         heroSummary: "Computer Science student focused on quality engineering: exploring test design, web automation, and API validation while building a foundation in Java and modern testing tools.",
@@ -172,6 +173,7 @@ const portfolioProfiles = {
         ]
     },
     developer: {
+        resumeUrl: "developer-resume.html",
         eyebrow: "AI DEVELOPER · BACKEND · FULL-STACK · B.TECH CSE 2027",
         heroTitle: "I build useful software, <span>from reliable APIs to AI-powered tools.</span>",
         heroSummary: "Computer Science student building backend and full-stack projects with practical API, database, and AI integration work.",
@@ -705,6 +707,9 @@ function applyPortfolioRole(role) {
     selectedPortfolioRole = role;
     document.body.dataset.role = role;
     document.title = `Chandan Kumar Sah Teli | ${role === "tester" ? "QA Automation Tester" : "AI Developer"}`;
+    document.querySelectorAll("[data-resume-link]").forEach((link) => {
+        link.href = profile.resumeUrl;
+    });
     updateProfileSwitcher(role);
     document.getElementById("profile-eyebrow").textContent = profile.eyebrow;
     document.getElementById("hero-title").innerHTML = profile.heroTitle;
