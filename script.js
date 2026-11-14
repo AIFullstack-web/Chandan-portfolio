@@ -172,7 +172,7 @@ const portfolioProfiles = {
         ]
     },
     developer: {
-        eyebrow: "BACKEND & FULL-STACK DEVELOPER · B.TECH CSE 2027",
+        eyebrow: "AI DEVELOPER · BACKEND · FULL-STACK · B.TECH CSE 2027",
         heroTitle: "I build useful software, <span>from reliable APIs to AI-powered tools.</span>",
         heroSummary: "Computer Science student building backend and full-stack projects with practical API, database, and AI integration work.",
         heroProof: "Project proof: public repositories spanning REST APIs, transactional data workflows, full-stack apps, and AI tools.",
@@ -189,7 +189,7 @@ const portfolioProfiles = {
         aboutCopy: "I’m a B.Tech Computer Science student graduating in 2027. I enjoy building backend APIs and full-stack applications, working with databases, and exploring how AI can make software more useful. I’m actively learning and improving through project work.",
         contactHeading: "Have an interesting problem to solve?",
         contactCopy: "I’m open to internships and early-career developer opportunities.",
-        contactLabel: "BACKEND & FULL-STACK DEVELOPER",
+        contactLabel: "AI DEVELOPER · BACKEND · FULL-STACK",
         contactIntro: "B.Tech CSE · graduating 2027",
         proofCards: [
             { icon: "fa-server", title: "Backend APIs", text: "Builds with Node.js, Express, request validation, REST endpoints, and structured server-side code." },
@@ -238,6 +238,20 @@ const portfolioProfiles = {
         ]
     }
 };
+
+let portfolioEvidence = null;
+let selectedPortfolioRole = "developer";
+let introReturnScroll = 0;
+let portfolioStarted = false;
+let reelIndex = 0;
+let reelTimer = null;
+let reelFrame = null;
+let reelCanvas = null;
+let reelContext = null;
+let reelPlaying = false;
+let portfolioRevealObserver = null;
+let portfolioMotionStarted = false;
+let scrollFrameRequested = false;
 
 const apiResponses = {
     "/api/profile-readiness": {
@@ -365,11 +379,190 @@ function renderPortfolioSkills(categories, curriculum = []) {
     container.innerHTML = `${categoryCards}${curriculumDetails}`;
 }
 
-let selectedPortfolioRole = "tester";
-let roleDialogReturnFocus = null;
-let portfolioRevealObserver = null;
-let portfolioMotionStarted = false;
-let scrollFrameRequested = false;
+function addEvidenceCard(container, item, kind) {
+    const card = document.createElement("article");
+    card.className = "evidence-card";
+
+    const label = document.createElement("span");
+    label.className = "evidence-kicker";
+    label.textContent = item.category || kind;
+
+    const title = document.createElement("h3");
+    title.textContent = item.title;
+
+    const description = document.createElement("p");
+    description.textContent = item.description || "";
+    card.append(label, title, description);
+
+    if (item.issuer || item.date) {
+        const detail = document.createElement("span");
+        detail.className = "evidence-detail";
+        detail.textContent = [item.issuer, item.date].filter(Boolean).join(" · ");
+        card.append(detail);
+    }
+
+    if (typeof item.url === "string") {
+        try {
+            const url = new URL(item.url);
+            if (url.protocol === "https:") {
+                const link = document.createElement("a");
+                link.className = "text-link";
+                link.href = url.href;
+                link.target = "_blank";
+                link.rel = "noreferrer";
+                link.textContent = kind === "Certificate" ? "Verify certificate ↗" : "View GitHub project ↗";
+                card.append(link);
+            }
+        } catch (error) {
+            console.error("Skipped an evidence link with an invalid URL.", error);
+        }
+    }
+
+    container.append(card);
+}
+
+function renderPortfolioEvidence(role) {
+    const highlightContainer = document.getElementById("portfolio-evidence");
+    const certificateContainer = document.getElementById("portfolio-certificates");
+    const certificateNote = document.getElementById("certificate-note");
+    if (!highlightContainer || !certificateContainer || !certificateNote || !portfolioEvidence) return;
+
+    highlightContainer.replaceChildren();
+    certificateContainer.replaceChildren();
+    portfolioEvidence.highlights
+        .filter((item) => item.role === role)
+        .forEach((item) => addEvidenceCard(highlightContainer, item, "GitHub project"));
+
+    const certificates = portfolioEvidence.certificates.filter((item) => !item.role || item.role === role);
+    certificates.forEach((item) => addEvidenceCard(certificateContainer, item, "Certificate"));
+    certificateContainer.hidden = certificates.length === 0;
+    certificateNote.hidden = certificates.length > 0;
+}
+
+async function loadPortfolioEvidence() {
+    const status = document.getElementById("evidence-status");
+    try {
+        const response = await fetch("./portfolio-evidence.json");
+        if (!response.ok) throw new Error(`Evidence request failed with HTTP ${response.status}.`);
+        const evidence = await response.json();
+        if (!Array.isArray(evidence.highlights) || !Array.isArray(evidence.certificates)) {
+            throw new Error("The portfolio evidence file must contain highlights and certificates arrays.");
+        }
+        portfolioEvidence = evidence;
+        renderPortfolioEvidence(selectedPortfolioRole);
+        if (status) status.textContent = "";
+    } catch (error) {
+        console.error("Could not load portfolio evidence.", error);
+        if (status) status.textContent = "GitHub highlights are unavailable. Open the public GitHub profile to view the projects.";
+    }
+}
+
+function updateReel(index = reelIndex + 1) {
+    const projects = portfolioProfiles[selectedPortfolioRole].projects;
+    if (!projects.length) return;
+
+    reelIndex = ((index % projects.length) + projects.length) % projects.length;
+    const project = projects[reelIndex];
+    const player = document.getElementById("reel-player");
+    document.getElementById("reel-index").textContent = `${String(reelIndex + 1).padStart(2, "0")} / ${String(projects.length).padStart(2, "0")}`;
+    document.getElementById("reel-big-type").textContent = selectedPortfolioRole === "tester" ? "QA" : "AI";
+    document.getElementById("reel-category").textContent = project.type.toUpperCase();
+    document.getElementById("reel-title").textContent = project.name;
+    document.getElementById("reel-description").textContent = project.problem;
+    document.getElementById("reel-source-link").href = project.url;
+    player.dataset.role = selectedPortfolioRole;
+    player.classList.remove("reel-transition");
+    window.requestAnimationFrame(() => {
+        player.classList.add("reel-transition");
+        if (!reelPlaying) renderReelFrame();
+    });
+}
+
+function renderReelFrame(timestamp = 0) {
+    if (!reelCanvas || !reelContext) return;
+    const context = reelContext;
+    const width = reelCanvas.width;
+    const height = reelCanvas.height;
+    const time = timestamp / 1000;
+    const isTester = selectedPortfolioRole === "tester";
+    const background = context.createLinearGradient(0, 0, width, height);
+    background.addColorStop(0, isTester ? "#17433f" : "#292450");
+    background.addColorStop(0.58, "#111827");
+    background.addColorStop(1, isTester ? "#081318" : "#0d1020");
+    context.fillStyle = background;
+    context.fillRect(0, 0, width, height);
+
+    const glowX = width * (0.72 + Math.sin(time * 0.34) * 0.08);
+    const glowY = height * (0.25 + Math.cos(time * 0.27) * 0.08);
+    const glow = context.createRadialGradient(glowX, glowY, 8, glowX, glowY, height * 0.65);
+    glow.addColorStop(0, isTester ? "rgba(196,243,107,.3)" : "rgba(156,139,255,.32)");
+    glow.addColorStop(1, "rgba(15,18,30,0)");
+    context.fillStyle = glow;
+    context.fillRect(0, 0, width, height);
+
+    context.globalAlpha = 0.12;
+    context.strokeStyle = "#dce7ff";
+    context.lineWidth = 1;
+    for (let x = -height; x < width + height; x += 64) {
+        context.beginPath();
+        context.moveTo(x + (time * 18 % 64), 0);
+        context.lineTo(x - height + (time * 18 % 64), height);
+        context.stroke();
+    }
+    context.globalAlpha = 1;
+
+    if (reelPlaying) reelFrame = window.requestAnimationFrame(renderReelFrame);
+}
+
+function initializeReelVideo() {
+    const video = document.getElementById("portfolio-reel-video");
+    if (!video || typeof HTMLCanvasElement.prototype.captureStream !== "function") return;
+
+    reelCanvas = document.createElement("canvas");
+    reelCanvas.width = 1280;
+    reelCanvas.height = 800;
+    reelContext = reelCanvas.getContext("2d", { alpha: false });
+    if (!reelContext) return;
+
+    video.srcObject = reelCanvas.captureStream(24);
+    renderReelFrame();
+}
+
+function setReelPlaying(playing) {
+    const player = document.getElementById("reel-player");
+    const button = document.getElementById("reel-toggle");
+    const video = document.getElementById("portfolio-reel-video");
+    if (!player || !button) return;
+
+    const wasPlaying = reelPlaying;
+    reelPlaying = playing;
+    window.clearInterval(reelTimer);
+    player.classList.toggle("is-playing", playing);
+    button.setAttribute("aria-pressed", String(playing));
+    button.innerHTML = playing
+        ? '<i class="fa-solid fa-pause" aria-hidden="true"></i> Pause reel'
+        : '<i class="fa-solid fa-play" aria-hidden="true"></i> Play reel';
+
+    if (playing) {
+        if (!wasPlaying) renderReelFrame();
+        if (video && video.srcObject) {
+            video.play().catch((error) => {
+                console.error("Could not start the portfolio motion reel.", error);
+                document.getElementById("reel-status").textContent = "Video playback is unavailable in this browser. You can still browse each project with the reel arrows.";
+            });
+        }
+        reelTimer = window.setInterval(() => updateReel(), 5200);
+    } else {
+        if (reelFrame) window.cancelAnimationFrame(reelFrame);
+        reelFrame = null;
+        if (video) video.pause();
+    }
+}
+
+function navigateReel(direction) {
+    updateReel(reelIndex + direction);
+    if (reelPlaying) setReelPlaying(true);
+}
 
 function refreshPortfolioReveals() {
     if (!portfolioMotionStarted || !portfolioRevealObserver) return;
@@ -482,10 +675,37 @@ function restorePortfolioHashPosition() {
     });
 }
 
-function applyPortfolioRole(role, closeDialog = true) {
-    const profile = portfolioProfiles[role] || portfolioProfiles.tester;
+function updateIntroSlide(role) {
+    if (!portfolioProfiles[role]) return;
+    selectedPortfolioRole = role;
+    document.querySelectorAll("[data-intro-role]").forEach((slide) => {
+        const active = slide.dataset.introRole === role;
+        slide.hidden = !active;
+        slide.tabIndex = active ? 0 : -1;
+        slide.setAttribute("aria-hidden", String(!active));
+        slide.classList.toggle("is-active", active);
+    });
+    document.querySelectorAll("[data-intro-select]").forEach((button) => {
+        const active = button.dataset.introSelect === role;
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-pressed", String(active));
+    });
+    document.getElementById("intro-counter").textContent = role === "tester" ? "02 / 02" : "01 / 02";
+}
+
+function updateProfileSwitcher(role) {
+    document.querySelectorAll("[data-profile-switch]").forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.profileSwitch === role));
+    });
+}
+
+function applyPortfolioRole(role) {
+    if (!portfolioProfiles[role]) return;
+    const profile = portfolioProfiles[role];
+    selectedPortfolioRole = role;
     document.body.dataset.role = role;
-    document.title = `Chandan Kumar Sah Teli | ${role === "tester" ? "QA Automation Tester" : "Developer"}`;
+    document.title = `Chandan Kumar Sah Teli | ${role === "tester" ? "QA Automation Tester" : "AI Developer"}`;
+    updateProfileSwitcher(role);
     document.getElementById("profile-eyebrow").textContent = profile.eyebrow;
     document.getElementById("hero-title").innerHTML = profile.heroTitle;
     document.getElementById("hero-summary").textContent = profile.heroSummary;
@@ -509,54 +729,57 @@ function applyPortfolioRole(role, closeDialog = true) {
     renderPortfolioProof(profile.proofCards);
     renderPortfolioProjects(profile.projects);
     renderPortfolioSkills(profile.skills, profile.curriculum);
+    renderPortfolioEvidence(role);
+    updateReel(0);
     refreshPortfolioReveals();
-    if (closeDialog) {
-        closeRoleDialog(false);
-    }
 }
 
-function updateRoleSelection(role) {
+function setPortfolioInert(inert) {
+    ["site-header", "main-content", "site-footer"].forEach((id) => {
+        const element = document.getElementById(id);
+        element.inert = inert;
+        if (inert) element.setAttribute("aria-hidden", "true");
+        else element.removeAttribute("aria-hidden");
+    });
+}
+
+function openRoleIntro() {
+    if (!portfolioStarted) return;
+    introReturnScroll = window.scrollY;
+    const intro = document.getElementById("role-intro");
+    intro.hidden = false;
+    intro.inert = false;
+    document.body.classList.add("role-intro-active");
+    setPortfolioInert(true);
+    updateIntroSlide(document.body.dataset.role);
+    document.querySelector(`[data-intro-role="${selectedPortfolioRole}"]`).focus();
+}
+
+function selectPortfolioRole(role) {
     if (!portfolioProfiles[role]) return;
-    selectedPortfolioRole = role;
-    document.querySelectorAll("[data-select-role]").forEach((button) => {
-        const selected = button.dataset.selectRole === role;
-        button.classList.toggle("selected", selected);
-        button.setAttribute("aria-pressed", String(selected));
-    });
-    document.getElementById("role-continue").innerHTML = `Continue as ${role === "tester" ? "Tester" : "Developer"} <i class="fa-solid fa-arrow-right"></i>`;
-}
+    const returningToPortfolio = portfolioStarted;
+    applyPortfolioRole(role);
 
-function openRoleDialog() {
-    roleDialogReturnFocus = document.activeElement;
-    const backdrop = document.getElementById("role-dialog-backdrop");
-    backdrop.hidden = false;
-    document.documentElement.classList.add("role-dialog-open");
-    document.body.classList.add("role-dialog-open");
-    document.querySelectorAll(".site-header, main, .site-footer").forEach((element) => {
-        element.inert = true;
-        element.setAttribute("aria-hidden", "true");
-    });
-    updateRoleSelection(document.body.dataset.role || "tester");
-    document.querySelector(`[data-select-role="${selectedPortfolioRole}"]`).focus();
-}
-
-function closeRoleDialog(restorePage = true) {
-    const backdrop = document.getElementById("role-dialog-backdrop");
-    if (!backdrop || backdrop.hidden) return;
-    backdrop.hidden = true;
-    document.documentElement.classList.remove("role-dialog-open");
-    document.body.classList.remove("role-dialog-open");
-    document.querySelectorAll(".site-header, main, .site-footer").forEach((element) => {
-        element.inert = false;
-        element.removeAttribute("aria-hidden");
-    });
-    if (roleDialogReturnFocus && roleDialogReturnFocus !== document.body && !backdrop.contains(roleDialogReturnFocus) && typeof roleDialogReturnFocus.focus === "function") {
-        roleDialogReturnFocus.focus();
-    } else if (restorePage) {
-        document.querySelector(".brand-lockup").focus();
+    const intro = document.getElementById("role-intro");
+    intro.hidden = true;
+    intro.inert = true;
+    document.body.classList.remove("role-intro-active");
+    setPortfolioInert(false);
+    if (returningToPortfolio) {
+        window.scrollTo({ top: introReturnScroll, behavior: "auto" });
+    } else {
+        window.scrollTo({ top: 0, behavior: "auto" });
     }
-    if (restorePage) {
-        setupPortfolioMotion();
+
+    portfolioStarted = true;
+    setupPortfolioMotion();
+    if (!returningToPortfolio && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        setReelPlaying(true);
+    }
+    if (returningToPortfolio) {
+        document.querySelector(".brand-lockup").focus({ preventScroll: true });
+    } else {
+        document.getElementById("hero-title").focus({ preventScroll: true });
         restorePortfolioHashPosition();
     }
 }
@@ -564,34 +787,43 @@ function closeRoleDialog(restorePage = true) {
 function setupPortfolio() {
     if (page !== "portfolio") return;
     document.getElementById("footer-year").textContent = new Date().getFullYear();
-    updateRoleSelection("tester");
-    document.querySelectorAll("[data-select-role]").forEach((button) => {
-        button.addEventListener("click", () => updateRoleSelection(button.dataset.selectRole));
-    });
-    document.getElementById("role-continue").addEventListener("click", () => applyPortfolioRole(selectedPortfolioRole));
-    document.querySelectorAll(".role-switch").forEach((button) => button.addEventListener("click", openRoleDialog));
-    document.addEventListener("keydown", (event) => {
-        const backdrop = document.getElementById("role-dialog-backdrop");
-        if (backdrop.hidden) return;
-        if (event.key === "Escape") {
-            applyPortfolioRole(document.body.dataset.role || "tester");
-            return;
-        }
-        if (event.key === "Tab") {
-            const focusable = Array.from(backdrop.querySelectorAll("button:not([disabled])"));
-            const first = focusable[0];
-            const last = focusable[focusable.length - 1];
-            if (event.shiftKey && document.activeElement === first) {
+    applyPortfolioRole("developer");
+    updateIntroSlide("developer");
+    initializeReelVideo();
+
+    document.querySelectorAll("[data-intro-role]").forEach((slide) => {
+        slide.addEventListener("click", () => selectPortfolioRole(slide.dataset.introRole));
+        slide.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
                 event.preventDefault();
-                last.focus();
-            } else if (!event.shiftKey && document.activeElement === last) {
-                event.preventDefault();
-                first.focus();
+                selectPortfolioRole(slide.dataset.introRole);
             }
+        });
+    });
+    document.getElementById("intro-previous").addEventListener("click", () => updateIntroSlide(selectedPortfolioRole === "developer" ? "tester" : "developer"));
+    document.getElementById("intro-next").addEventListener("click", () => updateIntroSlide(selectedPortfolioRole === "developer" ? "tester" : "developer"));
+    document.querySelectorAll("[data-intro-select]").forEach((button) => {
+        button.addEventListener("click", () => updateIntroSlide(button.dataset.introSelect));
+    });
+    document.querySelectorAll("[data-profile-switch]").forEach((button) => {
+        button.addEventListener("click", () => applyPortfolioRole(button.dataset.profileSwitch));
+    });
+    document.getElementById("back-to-intro").addEventListener("click", openRoleIntro);
+    document.getElementById("reel-toggle").addEventListener("click", () => setReelPlaying(!reelPlaying));
+    document.getElementById("reel-previous").addEventListener("click", () => navigateReel(-1));
+    document.getElementById("reel-next").addEventListener("click", () => navigateReel(1));
+    document.querySelectorAll(".role-switch").forEach((button) => button.addEventListener("click", openRoleIntro));
+    document.addEventListener("keydown", (event) => {
+        if (!document.body.classList.contains("role-intro-active")) return;
+        if (event.key === "ArrowLeft") {
+            updateIntroSlide(selectedPortfolioRole === "developer" ? "tester" : "developer");
+            document.querySelector(`[data-intro-role="${selectedPortfolioRole}"]`).focus();
+        } else if (event.key === "ArrowRight") {
+            updateIntroSlide(selectedPortfolioRole === "developer" ? "tester" : "developer");
+            document.querySelector(`[data-intro-role="${selectedPortfolioRole}"]`).focus();
         }
     });
-    applyPortfolioRole("tester", false);
-    openRoleDialog();
+    loadPortfolioEvidence();
 }
 
 function startTyping() {

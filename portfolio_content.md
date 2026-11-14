@@ -92,3 +92,13 @@ Computer Science student graduating in 2027, building backend and full-stack pro
 *   **Continuous Improvement:** Passionate about learning new technologies (Cloud, AI).
 *   **System Design Basics:** Understanding of how to structure maintainable applications.
 *   **Generative AI Integration:** Practical experience adding AI features to traditional apps.
+
+---
+
+## Updating GitHub Highlights and Certificates
+
+Edit `portfolio-evidence.json` to add or change a project highlight. Each highlight should use `role` (`developer` or `tester`), `category`, `title`, `description`, and a public `url`. Add only facts supported by the linked repository.
+
+Add verified certificates to the `certificates` array with `title`, `issuer`, `date`, and a public verification `url`. The array is empty until a real certificate is available; do not add placeholders or unverified claims.
+
+This static portfolio has no publishing backend. Changes to the JSON file appear on the website after the updated files are deployed.
