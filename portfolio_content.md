@@ -1,11 +1,18 @@
 # Portfolio / Resume Content
 **Name:** Chandan Kumar Sah Teli
-**Role:** Junior Backend Engineer | Computer Science Student
+**Role:** QA Automation Tester (learning focus) | Backend / Full-stack Developer | Computer Science Student
 
 ---
 
 ## 📌 About Me / Summary
-Motivated Computer Science student with strong engineering fundamentals and hands-on experience in backend development. Proficient in building scalable APIs, designing database schemas, and integrating AI capabilities into web applications. Actively learning cloud infrastructure and advanced system design while maintaining a continuous focus on writing clean, efficient, and modular code.
+Computer Science student graduating in 2027, building backend and full-stack projects while developing a quality engineering foundation. Interested in entry-level QA automation roles, with project-based exposure to REST APIs, browser automation, and automated tests. Testing tools and curriculum topics are presented as learning focus unless demonstrated by a linked project.
+
+## QA Automation Tester Profile
+**Positioning:** Early-career QA automation candidate; no professional QA experience is claimed.
+
+**Project evidence shown on the portfolio:** The Autonomous Job Agent repository describes a SeleniumBase browser execution module; OpsGuardian describes Jest/Supertest integration tests; Event Booking System describes REST request validation and transaction-aware booking logic; The Phoenix Agent describes verification with tests. These are repository-level signals, not measured outcomes.
+
+**Learning focus — Associate Automation Engineer curriculum:** Testing foundations (SDLC, QA, integration and user acceptance testing, Agile/Waterfall, JIRA, XRay, Confluence); Core and advanced Java (OOP, collections, streams, lambdas, exceptions, file I/O, Singleton and Builder patterns); Maven and Git; Selenium and Playwright; REST, Postman and REST Assured; TestNG and Cucumber; Jenkins; AWS (S3, EC2, EBS, Lambda, ECS/EKS/ECR); AI-assisted workflows (Gemini, Claude, agents and MCP); SQL/RDBMS; and Linux/shell. The portfolio presents this roadmap as learning focus, not completed proficiency.
 
 ---
 
