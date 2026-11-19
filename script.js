@@ -121,7 +121,7 @@ const portfolioProfiles = {
                 name: "OpsGuardian",
                 type: "Workflow · Integration testing",
                 problem: "A workflow for analyzing a backend incident and gating remediation behind human approval.",
-                proof: "The project description identifies integration tests using Jest and Supertest alongside workflow state and approval steps.",
+                proof: "Jest and Supertest integration tests cover workflow state and approval-gated remediation steps.",
                 stack: ["TypeScript", "Motia", "Jest", "Supertest", "OpenAI"],
                 url: "https://github.com/ChandanLabs/OpsGuardian"
             },
@@ -129,7 +129,7 @@ const portfolioProfiles = {
                 name: "Autonomous Job Agent",
                 type: "Browser automation · AI workflow",
                 problem: "A job-search workflow that gathers opportunities and prepares tailored application material.",
-                proof: "The repository description includes a browser execution module using SeleniumBase as one part of a broader agent workflow.",
+                proof: "SeleniumBase powers the browser execution module within a broader AI-assisted job-search workflow.",
                 stack: ["Python", "FastAPI", "LangGraph", "SeleniumBase"],
                 url: "https://github.com/AIFullstack-web/Job-agent-"
             },
@@ -137,7 +137,7 @@ const portfolioProfiles = {
                 name: "Event Booking System",
                 type: "REST API · Data correctness",
                 problem: "An event and attendance API where booking correctness matters when demand overlaps.",
-                proof: "The project description highlights request validation, Swagger documentation, and transaction-safe booking logic with SELECT FOR UPDATE.",
+                proof: "Request validation, Swagger documentation, and SELECT FOR UPDATE logic protect event booking correctness.",
                 stack: ["Node.js", "Express", "MySQL", "Sequelize", "Joi", "Swagger"],
                 url: "https://github.com/ChandanLabs/Event_Booking_System"
             },
@@ -145,7 +145,7 @@ const portfolioProfiles = {
                 name: "The Phoenix Agent",
                 type: "Service recovery · Verification",
                 problem: "A Node.js service that detects a crash and attempts an automated recovery workflow.",
-                proof: "The repository description says recovery is verified with tests; review the linked source for implementation details.",
+                proof: "Tested recovery flows verify crash detection and automated service restart behavior.",
                 stack: ["Node.js", "Express", "Docker", "Tests"],
                 url: "https://github.com/ChandanLabs/ThePhoenix-Agent"
             }
@@ -203,7 +203,7 @@ const portfolioProfiles = {
                 name: "Event Booking System",
                 type: "Backend API",
                 problem: "An event and attendance API where booking correctness matters under concurrent demand.",
-                proof: "The project description highlights Node.js, Express, MySQL, validation, Swagger documentation, and transaction-safe booking logic.",
+                proof: "Node.js and Express expose a validated MySQL API with Swagger documentation and transaction-safe booking logic.",
                 stack: ["Node.js", "Express", "MySQL", "Sequelize", "Joi", "Docker"],
                 url: "https://github.com/ChandanLabs/Event_Booking_System"
             },
@@ -211,7 +211,7 @@ const portfolioProfiles = {
                 name: "AI-First Laundry Management",
                 type: "Full-stack API",
                 problem: "A laundry order-management system with pricing, status transitions, filtering, and dashboard analytics.",
-                proof: "The project description highlights MVC structure, REST endpoints, validated state flow, and a responsive frontend.",
+                proof: "MVC structure, REST endpoints, validated state transitions, and a responsive dashboard support laundry operations.",
                 stack: ["Node.js", "Express", "JavaScript", "REST", "Dashboard"],
                 url: "https://github.com/AIFullstack-web/ai-first-laundry-management-system"
             },
@@ -251,9 +251,64 @@ let reelFrame = null;
 let reelCanvas = null;
 let reelContext = null;
 let reelPlaying = false;
+let reelUserPlaying = false;
+let reelHoverPaused = false;
+let reelVisibilityPaused = false;
 let portfolioRevealObserver = null;
 let portfolioMotionStarted = false;
 let scrollFrameRequested = false;
+
+const inlineIconPaths = {
+    "arrow-right": "<path d='M5 12h14m-5-5 5 5-5 5'/>",
+    "arrow-left": "<path d='M19 12H5m5-5-5 5 5 5'/>",
+    "arrow-down": "<path d='M12 4v16m-6-6 6 6 6-6'/>",
+    "arrow-up": "<path d='M12 20V4m-6 6 6-6 6 6'/>",
+    "external": "<path d='M14 5h5v5m0-5-9 9M19 14v4a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h4'/>",
+    "github": "<path d='M12 3a9 9 0 0 0-2.85 17.54c.45.08.62-.19.62-.43v-1.67c-2.53.55-3.06-1.08-3.06-1.08-.41-1.05-1.01-1.33-1.01-1.33-.83-.57.06-.56.06-.56.92.07 1.4.94 1.4.94.82 1.4 2.15.99 2.67.76.08-.59.32-.99.58-1.22-2.02-.23-4.14-1.01-4.14-4.5 0-.99.35-1.81.93-2.45-.09-.23-.4-1.16.09-2.42 0 0 .76-.24 2.5.94A8.7 8.7 0 0 1 12 7.48c.77 0 1.54.1 2.26.3 1.73-1.18 2.49-.94 2.49-.94.5 1.26.19 2.19.1 2.42.58.64.92 1.46.92 2.45 0 3.5-2.12 4.27-4.15 4.5.33.28.62.83.62 1.68v2.22c0 .24.16.52.63.43A9 9 0 0 0 12 3Z'/>",
+    "linkedin": "<path d='M5 9v10M5 5v.01M9 19V9m0 4c0-2.21 1.79-4 4-4s4 1.79 4 4v6m-8 0v-6'/>",
+    "envelope": "<rect x='3' y='5' width='18' height='14' rx='2'/><path d='m4 7 8 6 8-6'/>",
+    "file": "<path d='M6 3h9l3 3v15H6zM15 3v5h5M9 12h6m-6 4h6'/>",
+    "shield": "<path d='M12 3 20 6v6c0 5-3.4 8-8 9-4.6-1-8-4-8-9V6zM9 12l2 2 4-5'/>",
+    "sparkles": "<path d='m12 3 1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5zM19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z'/>",
+    "circle": "<circle cx='12' cy='12' r='4'/>",
+    "pause": "<path d='M7 5h4v14H7zm6 0h4v14h-4z'/>",
+    "play": "<path d='m8 5 11 7-11 7z'/>",
+    "plus": "<path d='M12 5v14M5 12h14'/>",
+    "rotate": "<path d='M4 4v6h6M5.5 15a7 7 0 1 0 1.8-7.8L4 10'/>",
+    "shuffle": "<path d='M4 7h3c5 0 5 10 10 10h3m-3-3 3 3-3 3M4 17h3c2 0 3-2 4-4m2-4c1-2 2-2 4-2h3m-3-3 3 3-3 3'/>",
+    "download": "<path d='M12 3v12m-5-5 5 5 5-5M5 21h14'/>",
+    "list": "<path d='M9 6h11M9 12h11M9 18h11M4 6h1M4 12h1M4 18h1'/>",
+    "code": "<path d='m8 8-4 4 4 4m8-8 4 4-4 4m-5 3 2-14'/>",
+    "graduation": "<path d='m3 9 9-5 9 5-9 5zM7 11v5c3 2 7 2 10 0v-5m4-2v6'/>",
+    "server": "<rect x='3' y='4' width='18' height='6' rx='2'/><rect x='3' y='14' width='18' height='6' rx='2'/><path d='M7 7h.01M7 17h.01M11 7h6m-6 10h6'/>",
+    "database": "<ellipse cx='12' cy='6' rx='8' ry='3'/><path d='M4 6v6c0 1.66 3.58 3 8 3s8-1.34 8-3V6M4 12v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6'/>",
+    "wand": "<path d='m4 20 11-11m-7 7 3-3m5-9v4m-2-2h4m5 6v3m-1.5-1.5h3M6 3v3M4.5 4.5h3'/>"
+};
+
+function hydrateInlineIcons(root = document) {
+    root.querySelectorAll("i[class*='fa-']").forEach((icon) => {
+        if (icon.dataset.iconHydrated) return;
+        const classes = Array.from(icon.classList);
+        const name = classes.map((className) => className.startsWith("fa-") ? className.slice(3) : "").find((className) =>
+            inlineIconPaths[className] ||
+            className === "list-check" ||
+            className === "code-branch" ||
+            className === "wand-magic-sparkles"
+        );
+        const normalizedName = name === "list-check" ? "list" : name === "code-branch" ? "code" : name === "wand-magic-sparkles" ? "wand" : name;
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("class", "svg-icon");
+        svg.setAttribute("viewBox", "0 0 24 24");
+        svg.setAttribute("aria-hidden", "true");
+        svg.setAttribute("fill", "none");
+        svg.setAttribute("stroke", "currentColor");
+        svg.setAttribute("stroke-width", "1.8");
+        svg.setAttribute("stroke-linecap", "round");
+        svg.setAttribute("stroke-linejoin", "round");
+        svg.innerHTML = inlineIconPaths[normalizedName] || "<circle cx='12' cy='12' r='4'/>";
+        icon.replaceWith(svg);
+    });
+}
 
 const apiResponses = {
     "/api/profile-readiness": {
@@ -269,7 +324,7 @@ const apiResponses = {
         ai: ["Autonomous Job Agent", "AI Cricket Bowling Analyzer", "OpsGuardian", "BharatRank"]
     },
     "/api/hire-signal": {
-        status: 201,
+        status: 200,
         message: "Proof-first fresher profile ready for internship and associate SDE conversations.",
         contact: "chandan.kumar.sah.teli2005@gmail.com"
     }
@@ -322,7 +377,7 @@ function renderProjects(containerId, projects) {
             <div class="project-proof">${project.proof}</div>
             <div class="project-tags">${project.stack.map((item) => `<span>${item}</span>`).join("")}</div>
             <div class="project-links">
-                <a class="btn small" href="${project.url}" target="_blank" rel="noreferrer"><i class="fa-brands fa-github"></i> Source</a>
+                <a class="btn small" href="${project.url}" target="_blank" rel="noreferrer"><svg class="svg-icon" viewBox="0 0 24 24" aria-hidden="true">${inlineIconPaths.github}</svg> Source</a>
             </div>
         </article>
     `).join("");
@@ -339,9 +394,10 @@ function renderPortfolioProjects(projects) {
             <p class="project-desc">${project.problem}</p>
             <div class="project-proof">${project.proof}</div>
             <div class="project-tags">${project.stack.map((item) => `<span>${item}</span>`).join("")}</div>
-            <div class="project-links"><a class="btn quiet small" href="${project.url}" target="_blank" rel="noreferrer"><i class="fa-brands fa-github"></i> View source</a></div>
+            <div class="project-links"><a class="btn quiet small" href="${project.url}" target="_blank" rel="noreferrer"><svg class="svg-icon" viewBox="0 0 24 24" aria-hidden="true">${inlineIconPaths.github}</svg> View source</a></div>
         </article>
     `).join("");
+    hydrateInlineIcons(container);
 }
 
 function renderPortfolioProof(cards) {
@@ -350,11 +406,12 @@ function renderPortfolioProof(cards) {
 
     container.innerHTML = cards.map((card) => `
         <article class="proof-card">
-            <i class="fa-solid ${card.icon}" aria-hidden="true"></i>
+            <svg class="svg-icon" viewBox="0 0 24 24" aria-hidden="true">${inlineIconPaths[card.icon === "fa-list-check" ? "list" : card.icon === "fa-code-branch" ? "code" : card.icon === "fa-graduation-cap" ? "graduation" : card.icon === "fa-server" ? "server" : card.icon === "fa-database" ? "database" : "wand"]}</svg>
             <h3>${card.title}</h3>
             <p>${card.text}</p>
         </article>
     `).join("");
+    hydrateInlineIcons(container);
 }
 
 function renderPortfolioSkills(categories, curriculum = []) {
@@ -370,7 +427,7 @@ function renderPortfolioSkills(categories, curriculum = []) {
     `).join("");
     const curriculumDetails = curriculum.length ? `
         <details class="curriculum-details">
-            <summary><span><strong>Associate Automation Engineer roadmap</strong><small>Expand curriculum topics · learning focus, not claimed proficiency</small></span><i class="fa-solid fa-plus" aria-hidden="true"></i></summary>
+            <summary><span><strong>Associate Automation Engineer roadmap</strong><small>Expand curriculum topics · learning focus, not claimed proficiency</small></span><svg class="svg-icon" viewBox="0 0 24 24" aria-hidden="true">${inlineIconPaths.plus}</svg></summary>
             <div class="curriculum-grid">${curriculum.map((group) => `
                 <article class="curriculum-group">
                     <h4>${group.title}</h4>
@@ -379,6 +436,7 @@ function renderPortfolioSkills(categories, curriculum = []) {
             `).join("")}</div>
         </details>` : "";
     container.innerHTML = `${categoryCards}${curriculumDetails}`;
+    hydrateInlineIcons(container);
 }
 
 function addEvidenceCard(container, item, kind) {
@@ -421,13 +479,13 @@ function addEvidenceCard(container, item, kind) {
     }
 
     container.append(card);
+    hydrateInlineIcons(card);
 }
 
 function renderPortfolioEvidence(role) {
     const highlightContainer = document.getElementById("portfolio-evidence");
     const certificateContainer = document.getElementById("portfolio-certificates");
-    const certificateNote = document.getElementById("certificate-note");
-    if (!highlightContainer || !certificateContainer || !certificateNote || !portfolioEvidence) return;
+    if (!highlightContainer || !certificateContainer || !portfolioEvidence) return;
 
     highlightContainer.replaceChildren();
     certificateContainer.replaceChildren();
@@ -438,7 +496,6 @@ function renderPortfolioEvidence(role) {
     const certificates = portfolioEvidence.certificates.filter((item) => !item.role || item.role === role);
     certificates.forEach((item) => addEvidenceCard(certificateContainer, item, "Certificate"));
     certificateContainer.hidden = certificates.length === 0;
-    certificateNote.hidden = certificates.length > 0;
 }
 
 async function loadPortfolioEvidence() {
@@ -536,16 +593,17 @@ function setReelPlaying(playing) {
     const video = document.getElementById("portfolio-reel-video");
     if (!player || !button) return;
 
+    reelUserPlaying = playing;
     const wasPlaying = reelPlaying;
-    reelPlaying = playing;
+    reelPlaying = playing && !reelHoverPaused && !reelVisibilityPaused;
     window.clearInterval(reelTimer);
-    player.classList.toggle("is-playing", playing);
-    button.setAttribute("aria-pressed", String(playing));
-    button.innerHTML = playing
-        ? '<i class="fa-solid fa-pause" aria-hidden="true"></i> Pause reel'
-        : '<i class="fa-solid fa-play" aria-hidden="true"></i> Play reel';
+    player.classList.toggle("is-playing", reelPlaying);
+    button.setAttribute("aria-pressed", String(reelPlaying));
+    button.innerHTML = reelPlaying
+        ? '<svg class="svg-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg> Pause reel'
+        : '<svg class="svg-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7z"/></svg> Play reel';
 
-    if (playing) {
+    if (reelPlaying) {
         if (!wasPlaying) renderReelFrame();
         if (video && video.srcObject) {
             video.play().catch((error) => {
@@ -657,6 +715,33 @@ function setupPortfolioMotion() {
 
         window.addEventListener("resize", updatePortfolioScrollState, { passive: true });
         updatePortfolioScrollState();
+
+        const reelPlayer = document.getElementById("reel-player");
+        if (reelPlayer) {
+            reelPlayer.tabIndex = 0;
+            reelPlayer.addEventListener("mouseenter", () => {
+                reelHoverPaused = true;
+                setReelPlaying(reelUserPlaying);
+            });
+            reelPlayer.addEventListener("mouseleave", () => {
+                reelHoverPaused = false;
+                setReelPlaying(reelUserPlaying);
+            });
+            reelPlayer.addEventListener("keydown", (event) => {
+                if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+                    event.preventDefault();
+                    navigateReel(event.key === "ArrowLeft" ? -1 : 1);
+                }
+            });
+
+            if ("IntersectionObserver" in window) {
+                const reelObserver = new IntersectionObserver((entries) => {
+                    reelVisibilityPaused = !entries[0].isIntersecting;
+                    setReelPlaying(reelUserPlaying);
+                }, { threshold: 0.18 });
+                reelObserver.observe(reelPlayer);
+            }
+        }
     }
 
     refreshPortfolioReveals();
@@ -707,6 +792,10 @@ function applyPortfolioRole(role) {
     selectedPortfolioRole = role;
     document.body.dataset.role = role;
     document.title = `Chandan Kumar Sah Teli | ${role === "tester" ? "QA Automation Tester" : "AI Developer"}`;
+    const qaHealthToggle = document.getElementById("qa-health-toggle");
+    if (qaHealthToggle) qaHealthToggle.hidden = role !== "tester";
+    const qaHealthPanel = document.getElementById("qa-health-panel");
+    if (qaHealthPanel && role !== "tester") qaHealthPanel.hidden = true;
     document.querySelectorAll("[data-resume-link]").forEach((link) => {
         link.href = profile.resumeUrl;
     });
@@ -714,7 +803,7 @@ function applyPortfolioRole(role) {
     document.getElementById("profile-eyebrow").textContent = profile.eyebrow;
     document.getElementById("hero-title").innerHTML = profile.heroTitle;
     document.getElementById("hero-summary").textContent = profile.heroSummary;
-    document.getElementById("hero-proof").innerHTML = `<i class="fa-solid fa-shield-halved"></i> ${profile.heroProof}`;
+    document.getElementById("hero-proof").innerHTML = `<svg class="svg-icon" viewBox="0 0 24 24" aria-hidden="true">${inlineIconPaths.shield}</svg> ${profile.heroProof}`;
     document.getElementById("snapshot-title").textContent = profile.snapshotTitle;
     document.getElementById("snapshot-summary").textContent = profile.snapshotSummary;
     document.getElementById("hero-bottom-label").textContent = profile.bottomLabel;
@@ -729,8 +818,9 @@ function applyPortfolioRole(role) {
     document.getElementById("contact-heading").textContent = profile.contactHeading;
     document.getElementById("contact-copy").textContent = profile.contactCopy;
     document.querySelector(".brand-name small").textContent = profile.contactLabel;
-    document.querySelector(".projects-all-link").innerHTML = `${role === "tester" ? "All repositories" : "ChandanLabs"} <i class="fa-solid fa-arrow-up-right-from-square"></i>`;
+    document.querySelector(".projects-all-link").innerHTML = `${role === "tester" ? "All repositories" : "ChandanLabs"} <svg class="svg-icon" viewBox="0 0 24 24" aria-hidden="true">${inlineIconPaths.external}</svg>`;
     document.querySelector(".quick-links").setAttribute("aria-label", `${role === "tester" ? "QA tester" : "Developer"} direct contact and profiles`);
+    hydrateInlineIcons();
     renderPortfolioProof(profile.proofCards);
     renderPortfolioProjects(profile.projects);
     renderPortfolioSkills(profile.skills, profile.curriculum);
@@ -792,6 +882,7 @@ function selectPortfolioRole(role) {
 function setupPortfolio() {
     if (page !== "portfolio") return;
     document.getElementById("footer-year").textContent = new Date().getFullYear();
+    hydrateInlineIcons();
     applyPortfolioRole("developer");
     updateIntroSlide("developer");
     initializeReelVideo();
@@ -818,6 +909,53 @@ function setupPortfolio() {
     document.getElementById("reel-previous").addEventListener("click", () => navigateReel(-1));
     document.getElementById("reel-next").addEventListener("click", () => navigateReel(1));
     document.querySelectorAll(".role-switch").forEach((button) => button.addEventListener("click", openRoleIntro));
+    const qaHealthToggle = document.getElementById("qa-health-toggle");
+    const qaHealthPanel = document.getElementById("qa-health-panel");
+    const qaHealthOutput = document.getElementById("qa-health-output");
+    const qaHealthCount = document.getElementById("qa-health-count");
+    qaHealthToggle?.addEventListener("click", async () => {
+        if (!qaHealthPanel || !qaHealthOutput || !qaHealthCount) return;
+        qaHealthPanel.hidden = false;
+        qaHealthPanel.open = true;
+        const startedAt = performance.now();
+        qaHealthOutput.textContent = "$ running portfolio health checks\n";
+        const checks = [];
+
+        let evidenceLoaded = false;
+        try {
+            const response = await fetch("./portfolio-evidence.json", { cache: "no-store" });
+            evidenceLoaded = response.ok && Array.isArray((await response.json()).highlights);
+        } catch (error) {
+            evidenceLoaded = false;
+        }
+        checks.push({ name: "portfolio-evidence.json loaded and parsed", passed: evidenceLoaded });
+
+        const repositoryAndResumeLinks = Array.from(document.querySelectorAll(
+            "#portfolio-projects a[href], #portfolio-evidence a[href], [data-resume-link][href]"
+        ));
+        checks.push({
+            name: "Project and resume links have valid href attributes",
+            passed: repositoryAndResumeLinks.length > 0 && repositoryAndResumeLinks.every((link) => {
+                const href = link.getAttribute("href")?.trim();
+                return Boolean(href && href !== "#");
+            })
+        });
+
+        const placeholderVisible = Array.from(document.querySelectorAll("body *"))
+            .some((element) => element.children.length === 0 &&
+                /No\s+verified\s+certificates/i.test(element.textContent));
+        checks.push({
+            name: "No certificate placeholder text is visible",
+            passed: !placeholderVisible
+        });
+
+        const elapsed = Math.max(1, Math.round(performance.now() - startedAt));
+        const passed = checks.filter((check) => check.passed).length;
+        qaHealthCount.textContent = `${passed}/${checks.length} PASS · ${elapsed} ms`;
+        qaHealthOutput.textContent = "$ running portfolio health checks\n" + checks.map((check) =>
+            `${check.passed ? "PASS" : "FAIL"}  ${check.name}`
+        ).join("\n") + `\n\n${passed}/${checks.length} assertions passed · ${elapsed} ms`;
+    });
     document.addEventListener("keydown", (event) => {
         if (!document.body.classList.contains("role-intro-active")) return;
         if (event.key === "ArrowLeft") {
@@ -902,9 +1040,32 @@ function setupBackToTop() {
 
 function setupApiConsole() {
     const endpointInput = document.getElementById("api-endpoint");
+    const methodSelect = document.getElementById("http-method");
+    const requestBody = document.getElementById("api-request-body");
     const responseElement = document.getElementById("json-response");
     const sendButton = document.getElementById("send-request");
+    const statusBadge = document.getElementById("api-status-badge");
+    const responseTime = document.getElementById("api-response-time");
+    const copyResponse = document.getElementById("copy-response");
+    const copyCurl = document.getElementById("copy-curl");
     if (!endpointInput || !responseElement || !sendButton) return;
+
+    let lastResponseText = "";
+
+    const updateRequestVisibility = () => {
+        const isPost = methodSelect?.value === "POST";
+        if (requestBody) {
+            requestBody.hidden = !isPost;
+            if (isPost && !requestBody.value.trim()) {
+                const role = document.body.dataset.role === "tester" ? "QA Automation" : "AI Developer";
+                requestBody.value = role === "QA Automation"
+                    ? '{"targetRole":"QA Automation","skills":["Java","Selenium","REST API"]}'
+                    : '{"targetRole":"AI Developer","skills":["Node.js","REST APIs","AI Integration"]}';
+            }
+        }
+    };
+
+    methodSelect?.addEventListener("change", updateRequestVisibility);
 
     document.querySelectorAll("[data-endpoint]").forEach((button) => {
         button.addEventListener("click", () => {
@@ -914,8 +1075,24 @@ function setupApiConsole() {
 
     sendButton.addEventListener("click", () => {
         const endpoint = endpointInput.value.trim();
+        const method = methodSelect?.value || "GET";
         responseElement.textContent = "// Processing...";
-        setTimeout(() => {
+        if (statusBadge) {
+            statusBadge.textContent = "Processing";
+            statusBadge.className = "http-status";
+        }
+        const startedAt = performance.now();
+        window.setTimeout(() => {
+            let statusCode = 200;
+            let parsedBody = null;
+            if (method === "POST") {
+                try {
+                    parsedBody = JSON.parse(requestBody?.value || "");
+                } catch (error) {
+                    statusCode = 400;
+                }
+            }
+
             const activeProfile = portfolioProfiles[document.body.dataset.role];
             const activeResponses = page === "portfolio" && activeProfile ? {
                 "/api/profile-readiness": {
@@ -923,22 +1100,67 @@ function setupApiConsole() {
                     candidate: "Chandan Kumar Sah Teli",
                     profile: document.body.dataset.role === "tester" ? "QA Automation Tester" : "Developer",
                     focus: activeProfile.snapshotTitle,
-                    graduation: "B.Tech CSE, graduating 2027"
+                    graduation: "B.Tech CSE, graduating 2027",
+                    query: parsedBody
                 },
                 "/api/strongest-projects": {
                     status: 200,
-                    projects: activeProfile.projects.map((project) => project.name)
+                    profile: document.body.dataset.role === "tester" ? "QA Automation" : "AI Developer",
+                    projects: activeProfile.projects.map((project) => ({ name: project.name, purpose: project.problem, technologies: project.stack })),
+                    query: parsedBody
                 },
                 "/api/hire-signal": {
                     status: 201,
                     message: activeProfile.contactCopy,
-                    contact: "chandan.kumar.sah.teli2005@gmail.com"
+                    contact: "chandan.kumar.sah.teli2005@gmail.com",
+                    profile: document.body.dataset.role === "tester" ? "QA Automation" : "AI Developer",
+                    query: parsedBody
                 }
             } : apiResponses;
-            const response = activeResponses[endpoint] || { status: 404, error: "Endpoint not found", available: Object.keys(activeResponses) };
-            responseElement.textContent = JSON.stringify(response, null, 2);
+
+            let response;
+            if (statusCode === 400) {
+                response = {
+                    status: 400,
+                    error: "Bad Request",
+                    message: "POST body must be valid JSON."
+                };
+            } else {
+                response = activeResponses[endpoint];
+                if (!response) {
+                    statusCode = 404;
+                    response = { status: 404, error: "Endpoint not found", available: Object.keys(activeResponses) };
+                }
+            }
+
+            lastResponseText = JSON.stringify(response, null, 2);
+            responseElement.textContent = lastResponseText;
+            const elapsed = Math.max(1, Math.round(performance.now() - startedAt));
+            if (responseTime) responseTime.textContent = `${elapsed} ms`;
+            if (statusBadge) {
+                statusBadge.textContent = statusCode === 200 ? "200 OK" : statusCode === 400 ? "400 Bad Request" : "404 Not Found";
+                statusBadge.className = `http-status ${statusCode >= 400 ? "is-error" : "is-success"}`;
+            }
         }, 350);
     });
+
+    copyResponse?.addEventListener("click", async () => {
+        if (!lastResponseText) return;
+        await navigator.clipboard?.writeText(lastResponseText);
+        copyResponse.textContent = "Copied";
+        window.setTimeout(() => { copyResponse.textContent = "Copy Response"; }, 1200);
+    });
+
+    copyCurl?.addEventListener("click", async () => {
+        const method = methodSelect?.value || "GET";
+        const body = method === "POST" ? ` -d '${requestBody?.value || "{}"}'` : "";
+        const curl = `curl -X ${method} '${location.origin}${endpointInput.value.trim()}'${body}`;
+        await navigator.clipboard?.writeText(curl);
+        copyCurl.textContent = "Copied";
+        window.setTimeout(() => { copyCurl.textContent = "Copy cURL"; }, 1200);
+    });
+
+    updateRequestVisibility();
 }
 
 function setupContactForm() {

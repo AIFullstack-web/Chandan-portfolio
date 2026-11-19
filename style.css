@@ -252,6 +252,21 @@ pre { white-space: pre-wrap; word-break: break-word; }
 
 .api-console { padding: 18px; }
 .api-toolbar { display: grid; grid-template-columns: 110px minmax(0, 1fr) auto; gap: 10px; }
+.api-request-body { display: block; min-height: 112px; margin: 14px 0 0; resize: vertical; font-family: var(--mono); }
+.api-request-body[hidden] { display: none; }
+.api-response-meta { display: flex; align-items: center; gap: 12px; margin: 12px 0 10px; color: var(--muted); font-family: var(--mono); font-size: 0.78rem; }
+.http-status { border: 1px solid var(--line); border-radius: 999px; padding: 5px 9px; color: var(--muted); background: var(--surface); }
+.http-status.is-success { border-color: rgba(190, 230, 94, .42); color: #c9ef72; background: rgba(190, 230, 94, .08); }
+.http-status.is-error { border-color: rgba(255, 126, 126, .42); color: #ff9c9c; background: rgba(255, 126, 126, .08); }
+.api-copy-actions { display: flex; gap: 8px; margin-left: auto; }
+.api-copy-actions button { border: 1px solid var(--line); border-radius: 7px; background: var(--panel); color: var(--text); padding: 7px 9px; cursor: pointer; font: inherit; }
+.api-copy-actions button:hover { border-color: rgba(190, 230, 94, .55); color: var(--accent); }
+.qa-health-toggle { margin-top: 14px; min-height: 38px; }
+.qa-health-toggle[hidden], .qa-health-panel[hidden] { display: none; }
+.qa-health-panel { margin-top: 12px; border: 1px solid var(--line); border-radius: 8px; background: #080b12; overflow: hidden; }
+.qa-health-panel summary { display: flex; justify-content: space-between; gap: 12px; padding: 9px 11px; color: var(--text); cursor: pointer; font-size: .76rem; }
+.qa-health-panel pre { margin: 0; max-height: 180px; overflow: auto; border-top: 1px solid var(--line); padding: 10px 11px; color: #bdebd7; font-family: var(--mono); font-size: .7rem; line-height: 1.55; white-space: pre-wrap; }
+.svg-icon { width: 1em; height: 1em; display: inline-block; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; vertical-align: -0.12em; }
 .terminal-select, .terminal-input-inline, .terminal-input {
     width: 100%;
     min-height: 42px;

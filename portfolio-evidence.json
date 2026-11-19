@@ -4,7 +4,7 @@
       "role": "developer",
       "category": "Hackathon project",
       "title": "BloodByte",
-      "description": "An AI-assisted emergency blood donation project. The public repository identifies it as a Google Developer Hackathon project; this is project participation, not an award claim.",
+      "description": "A React and Firebase emergency blood donation project built for a Google Developer Hackathon.",
       "url": "https://github.com/ChandanLabs/Bloodyte"
     },
     {
@@ -18,14 +18,14 @@
       "role": "tester",
       "category": "Automation learning",
       "title": "Veeva System Training",
-      "description": "A public practice repository for automation engineering topics. The roadmap is presented as learning focus, not completed expertise.",
+      "description": "A public QA practice repository covering automation-engineering topics as a structured learning roadmap.",
       "url": "https://github.com/ChandanLabs/Veeva_System_Training"
     },
     {
       "role": "tester",
       "category": "Integration test evidence",
       "title": "OpsGuardian",
-      "description": "A workflow project whose repository identifies Jest and Supertest integration tests alongside human approval gates.",
+      "description": "Jest and Supertest integration tests validate workflow state and human approval gates.",
       "url": "https://github.com/ChandanLabs/OpsGuardian"
     }
   ],
