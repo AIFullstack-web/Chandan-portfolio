@@ -1,155 +1,258 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Chandan Kumar Sah Teli - B.Tech CSE student graduating 2027, SDE fresher, backend developer, and AI builder.">
-    <title>Chandan Kumar Sah Teli | SDE Fresher Portfolio</title>
+    <meta name="description" content="Chandan Kumar Sah Teli - QA automation tester in training and backend developer, with project-based engineering proof.">
+    <meta name="theme-color" content="#10111d">
+    <title>Chandan Kumar Sah Teli | QA Automation Tester</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body data-page="sde">
-    <div class="shell">
-        <aside class="sidebar">
-            <div class="profile-lockup">
-                <div class="avatar-frame">
-                    <img src="https://github.com/ChandanLabs.png" alt="Chandan Kumar Sah Teli" class="avatar">
-                    <span class="status-dot"></span>
+<body data-page="portfolio" data-role="developer" class="role-intro-active">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <section class="role-intro" id="role-intro" aria-label="Choose a portfolio profile">
+        <div class="intro-atmosphere intro-atmosphere-one" aria-hidden="true"></div>
+        <div class="intro-atmosphere intro-atmosphere-two" aria-hidden="true"></div>
+        <div class="intro-topline">
+            <a class="intro-brand" href="https://github.com/ChandanLabs" target="_blank" rel="noreferrer">
+                <span class="brand-mark">C<span>.</span></span>
+                <span>CHANDAN KUMAR SAH TELI<small>PORTFOLIO · 2026</small></span>
+            </a>
+            <span class="intro-counter" id="intro-counter" aria-live="polite">01 <i>/</i> 02</span>
+        </div>
+        <div class="intro-carousel" id="intro-carousel">
+            <article class="intro-slide intro-slide-ai is-active" data-intro-role="developer" role="button" tabindex="0" aria-label="Explore the AI Developer profile">
+                <span class="intro-backdrop-word" aria-hidden="true">AI<br>DEVELOPER</span>
+                <div class="intro-side-note"><span>01</span><span>BUILD · EXPLORE · SHIP</span></div>
+                <div class="intro-portrait-wrap">
+                    <span class="portrait-orbit portrait-orbit-one" aria-hidden="true"></span>
+                    <span class="portrait-orbit portrait-orbit-two" aria-hidden="true"></span>
+                    <span class="portrait-glow" aria-hidden="true"></span>
+                    <img class="intro-portrait" src="assets/chandan-avatar.png" alt="Portrait of Chandan Kumar Sah Teli" fetchpriority="high">
+                    <span class="portrait-caption"><i class="fa-solid fa-sparkles" aria-hidden="true"></i> AI · FULL-STACK · BACKEND</span>
                 </div>
-                <div>
-                    <p class="eyebrow">Portfolio Kernel</p>
-                    <h1>Chandan</h1>
-                    <p class="typing-line"><span id="typing-role">SDE Fresher</span><span class="cursor">|</span></p>
+                <div class="intro-bottom">
+                    <div class="intro-copy">
+                        <p class="eyebrow">HELLO, I'M CHANDAN</p>
+                        <h1>AI Developer</h1>
+                        <p>Computer Science student building useful software with backend systems, AI workflows, and creative ideas.</p>
+                    </div>
+                    <span class="intro-cta">Explore AI Profile <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+                </div>
+            </article>
+            <article class="intro-slide intro-slide-qa" data-intro-role="tester" role="button" tabindex="-1" aria-label="Explore the QA Automation profile" aria-hidden="true" hidden>
+                <span class="intro-backdrop-word" aria-hidden="true">QA<br>AUTOMATION</span>
+                <div class="intro-side-note"><span>02</span><span>DESIGN · VERIFY · IMPROVE</span></div>
+                <div class="intro-portrait-wrap">
+                    <span class="portrait-orbit portrait-orbit-one" aria-hidden="true"></span>
+                    <span class="portrait-orbit portrait-orbit-two" aria-hidden="true"></span>
+                    <span class="portrait-glow" aria-hidden="true"></span>
+                    <img class="intro-portrait" src="assets/chandan-avatar.png" alt="Portrait of Chandan Kumar Sah Teli">
+                    <span class="portrait-caption"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> QUALITY · AUTOMATION · APIs</span>
+                </div>
+                <div class="intro-bottom">
+                    <div class="intro-copy">
+                        <p class="eyebrow">QUALITY ENGINEERING · LEARNING IN PUBLIC</p>
+                        <h1>QA Automation</h1>
+                        <p>Explore my project-based testing signals and the automation curriculum I’m working through.</p>
+                    </div>
+                    <span class="intro-cta">Explore QA Profile <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+                </div>
+            </article>
+        </div>
+        <div class="intro-controls">
+            <button class="intro-arrow" id="intro-previous" type="button" aria-label="Previous profile"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+            <div class="intro-pagination" role="group" aria-label="Choose an intro slide">
+                <button class="intro-dot is-active" type="button" data-intro-select="developer" aria-label="Show AI Developer slide" aria-pressed="true"></button>
+                <button class="intro-dot" type="button" data-intro-select="tester" aria-label="Show QA Automation slide" aria-pressed="false"></button>
+            </div>
+            <button class="intro-arrow" id="intro-next" type="button" aria-label="Next profile"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+            <span class="intro-help">Choose a slide · Enter to explore</span>
+        </div>
+        <span class="intro-copyright">PERSONAL PORTFOLIO <i>·</i> INDIA</span>
+    </section>
+
+    <div class="scroll-progress" aria-hidden="true"><span id="scroll-progress-bar"></span></div>
+    <header class="site-header" id="site-header" inert aria-hidden="true">
+        <a class="brand-lockup" href="#home" aria-label="Chandan Kumar Sah Teli, home">
+            <span class="brand-mark">C<span>.</span></span>
+            <span class="brand-name">Chandan Kumar Sah Teli<small>QA AUTOMATION TESTER · DEVELOPER</small></span>
+        </a>
+        <nav class="site-nav" aria-label="Main navigation">
+            <a href="#work">Projects</a>
+            <a href="#reel">Reel</a>
+            <a href="#evidence">GitHub proof</a>
+            <a href="#skills">Skills</a>
+            <a href="#about">About</a>
+        </nav>
+        <div class="role-switcher" id="role-switcher" aria-label="Switch portfolio profile">
+            <button type="button" data-profile-switch="developer" aria-pressed="true">AI Developer</button>
+            <button type="button" data-profile-switch="tester" aria-pressed="false">QA Automation</button>
+            <button class="back-to-intro" id="back-to-intro" type="button"><i class="fa-solid fa-arrow-rotate-left" aria-hidden="true"></i> Back to Intro</button>
+        </div>
+        <div class="header-actions">
+            <a class="text-link" data-resume-link href="developer-resume.html">Resume <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            <a class="btn primary header-contact" href="mailto:chandan.kumar.sah.teli2005@gmail.com">Let's talk <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+        </div>
+    </header>
+
+    <main id="main-content" inert aria-hidden="true">
+        <section id="home" class="hero-section">
+            <div class="hero-glow hero-glow-one" aria-hidden="true"></div>
+            <div class="hero-glow hero-glow-two" aria-hidden="true"></div>
+            <div class="hero-inner">
+                <div class="hero-copy">
+                    <p class="eyebrow"><span class="availability-dot"></span><span id="profile-eyebrow">QA AUTOMATION TESTER · EARLY CAREER</span></p>
+                    <h1 id="hero-title" tabindex="-1">I build confidence in software, <span>one thoughtful test at a time.</span></h1>
+                    <p class="hero-lead" id="hero-summary">Computer Science student focused on quality engineering: exploring test design, web automation, and API validation while building a foundation in Java and modern testing tools.</p>
+                    <p class="proof-line" id="hero-proof"><i class="fa-solid fa-shield-halved"></i> Project proof: REST API validation and automated test suites in public repositories.</p>
+                    <div class="hero-cta">
+                        <a class="btn primary" href="#work">Explore selected work <i class="fa-solid fa-arrow-down"></i></a>
+                        <a class="btn quiet" data-resume-link href="developer-resume.html"><i class="fa-regular fa-file-lines"></i> View resume</a>
+                    </div>
+                    <div class="quick-links" aria-label="Direct contact and profiles">
+                        <a href="mailto:chandan.kumar.sah.teli2005@gmail.com"><i class="fa-regular fa-envelope"></i> Email</a>
+                        <a href="https://github.com/ChandanLabs" target="_blank" rel="noreferrer"><i class="fa-brands fa-github"></i> GitHub</a>
+                        <a href="https://linkedin.com/in/chandan-kumar-sah-teli-8718b6364/" target="_blank" rel="noreferrer"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                    </div>
+                </div>
+                <aside class="hero-card" aria-label="Candidate snapshot">
+                    <div class="hero-card-top"><span class="mini-avatar">CS</span><span class="card-status"><i class="fa-solid fa-circle"></i> OPEN TO OPPORTUNITIES</span></div>
+                    <p class="card-label">CURRENT FOCUS</p>
+                    <h2 id="snapshot-title">Quality engineering</h2>
+                    <p id="snapshot-summary">Turning requirements into clear checks, useful automation, and dependable releases.</p>
+                    <div class="snapshot-divider"></div>
+                    <div class="snapshot-meta"><span>Education</span><strong>B.Tech CSE · 2027</strong></div>
+                    <div class="snapshot-meta"><span>Location</span><strong>India</strong></div>
+                    <button class="text-link role-switch" type="button" id="change-role"><i class="fa-solid fa-shuffle"></i> Switch portfolio profile</button>
+                    <div class="orbit orbit-one" aria-hidden="true"></div>
+                    <div class="orbit orbit-two" aria-hidden="true"></div>
+                </aside>
+            </div>
+            <div class="hero-bottom"><span>SCROLL TO EXPLORE</span><span class="scroll-line"></span><span id="hero-bottom-label">QUALITY ENGINEERING · PROJECT-LED LEARNING</span></div>
+        </section>
+
+        <section id="work" class="content-section work-section">
+            <div class="section-shell">
+                <div class="section-title-row">
+                    <div><p class="eyebrow">SELECTED PROJECTS</p><h2 id="projects-heading">Project work with testing signals.</h2><p id="projects-intro">A small selection of repositories where APIs, automation, and software behavior can be explored in code.</p></div>
+                    <a class="text-link projects-all-link" href="https://github.com/ChandanLabs" target="_blank" rel="noreferrer">All repositories <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                </div>
+                <div class="projects-grid portfolio-projects" id="portfolio-projects"></div>
+            </div>
+        </section>
+
+        <section id="reel" class="content-section reel-section">
+            <div class="section-shell reel-layout">
+                <div class="section-intro reel-intro">
+                    <p class="eyebrow">MOTION REEL · PROJECTS IN ACTION</p>
+                    <h2>A quick-cut tour of what I build.</h2>
+                    <p>This original, lightweight project reel cycles through real GitHub work. The supplied reference video informs the motion style; its third-party footage is not republished here.</p>
+                    <div class="reel-actions">
+                        <button class="btn primary" id="reel-toggle" type="button" aria-pressed="true"><i class="fa-solid fa-pause" aria-hidden="true"></i> Pause reel</button>
+                        <button class="btn quiet" id="reel-previous" type="button" aria-label="Previous project in reel"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+                        <button class="btn quiet" id="reel-next" type="button" aria-label="Next project in reel"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                        <a class="btn quiet" id="reel-source-link" href="https://github.com/ChandanLabs" target="_blank" rel="noreferrer"><i class="fa-brands fa-github" aria-hidden="true"></i> View project</a>
+                    </div>
+                    <p class="reel-status" id="reel-status" role="status" aria-live="polite"></p>
+                </div>
+                <div class="reel-player" id="reel-player" aria-label="Animated portfolio project reel">
+                    <div class="reel-screen">
+                        <video class="reel-video" id="portfolio-reel-video" muted playsinline aria-hidden="true"></video>
+                        <div class="reel-scanlines" aria-hidden="true"></div>
+                        <span class="reel-index" id="reel-index">01 / 04</span>
+                        <span class="reel-big-type" id="reel-big-type" aria-hidden="true">AI</span>
+                        <div class="reel-photo-frame"><img src="assets/chandan-avatar.png" alt="" loading="lazy"></div>
+                        <div class="reel-caption">
+                            <span class="eyebrow" id="reel-category">AI · COMPUTER VISION</span>
+                            <h3 id="reel-title">AI Cricket Bowling Analyzer</h3>
+                            <p id="reel-description">Computer vision, biomechanics, and coaching feedback in one project.</p>
+                        </div>
+                        <span class="reel-sound-label"><i class="fa-solid fa-circle" aria-hidden="true"></i> PROJECT REEL</span>
+                    </div>
+                    <div class="reel-progress" aria-hidden="true"><span id="reel-progress-bar"></span></div>
                 </div>
             </div>
+        </section>
 
-            <nav class="nav-menu" aria-label="Primary navigation">
-                <a href="#home" class="nav-item active"><i class="fa-solid fa-house"></i><span>Home</span></a>
-                <a href="#proof" class="nav-item"><i class="fa-solid fa-chart-line"></i><span>Proof</span></a>
-                <a href="#skills" class="nav-item"><i class="fa-solid fa-layer-group"></i><span>Skills</span></a>
-                <a href="#projects" class="nav-item"><i class="fa-solid fa-code-branch"></i><span>Projects</span></a>
-                <a href="#console" class="nav-item"><i class="fa-solid fa-terminal"></i><span>API Console</span></a>
-                <a href="#contact" class="nav-item"><i class="fa-solid fa-paper-plane"></i><span>Contact</span></a>
-            </nav>
-
-            <div class="sidebar-panel">
-                <p class="panel-label">Current Target</p>
-                <strong>Internship / Associate SDE</strong>
-                <span>B.Tech CSE, graduating 2027</span>
+        <section id="evidence" class="content-section evidence-section">
+            <div class="section-shell">
+                <div class="section-title-row">
+                    <div>
+                        <p class="eyebrow">GITHUB · VERIFIED PROJECT PROOF</p>
+                        <h2 id="evidence-heading">Milestones built in public.</h2>
+                        <p id="evidence-intro">Selected project milestones linked directly to their repositories. These are project achievements, not award or certificate claims.</p>
+                    </div>
+                    <a class="text-link" href="https://github.com/ChandanLabs" target="_blank" rel="noreferrer">Explore GitHub <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+                </div>
+                <div class="evidence-grid" id="portfolio-evidence"></div>
+                <div class="certificate-grid" id="portfolio-certificates" hidden></div>
+                <div class="certificate-note" id="certificate-note">
+                    <i class="fa-regular fa-file-lines" aria-hidden="true"></i>
+                    <p><strong>Certificates</strong><span>No verified certificates are listed yet. Add a title, issuer, date, and verification URL to <code>portfolio-evidence.json</code> when ready.</span></p>
+                </div>
+                <p class="evidence-status" id="evidence-status" role="status" aria-live="polite">Loading verified GitHub highlights...</p>
             </div>
-        </aside>
+        </section>
 
-        <main class="main-panel">
-            <header class="top-bar">
-                <div class="window-controls" aria-hidden="true">
-                    <span class="control red"></span>
-                    <span class="control yellow"></span>
-                    <span class="control green"></span>
+        <section id="proof" class="content-section proof-section">
+            <div class="section-shell">
+                <div class="section-intro">
+                    <p class="eyebrow">WHAT I BRING</p>
+                    <h2 id="proof-heading">A quality mindset, grounded in real projects.</h2>
+                    <p id="proof-intro">I’m building toward QA automation through structured learning and hands-on project work. These are engineering signals shown by the repositories—not claims of professional QA experience.</p>
                 </div>
-                <span class="window-title">chandan@sde-portfolio:~/career</span>
-                <div class="top-actions">
-                    <a class="top-link" href="ai.html">AI Workspace</a>
-                    <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle theme"><i class="fa-solid fa-sun"></i></button>
-                    <span id="clock" class="clock">00:00:00</span>
+                <div class="proof-grid" id="proof-cards"></div>
+            </div>
+        </section>
+
+        <section id="skills" class="content-section skills-section">
+            <div class="section-shell skills-layout">
+                <div class="section-intro">
+                    <p class="eyebrow">TOOLS & LEARNING</p>
+                    <h2 id="skills-heading">Clear about what I know—and what I’m learning.</h2>
+                    <p id="skills-intro">Grouped by use, without proficiency scores. My QA roadmap is presented as a learning focus, not as completed expertise.</p>
                 </div>
-            </header>
+                <div class="skill-board" id="portfolio-skills"></div>
+            </div>
+        </section>
 
-            <div class="content-scroll">
-                <section id="home" class="section active-section">
-                    <div class="hero-grid">
-                        <div class="hero-copy">
-                            <p class="prompt">chandan@portfolio:~$ ./introduce --role=sde-fresher</p>
-                            <h2>B.Tech CSE student graduating 2027, building backend systems with AI instincts.</h2>
-                            <p class="lead">I am looking for internship or associate SDE roles where I can bring strong backend fundamentals, practical API/database work, and a builder mindset shaped by AI projects.</p>
-                            <div class="hero-actions">
-                                <a class="btn primary" href="#projects"><i class="fa-solid fa-code"></i> View Projects</a>
-                                <a class="btn" href="ChandanKumarSahTeli_Resume.pdf" download><i class="fa-solid fa-file-arrow-down"></i> Resume</a>
-                                <a class="btn accent" href="ai.html"><i class="fa-solid fa-brain"></i> AI Engineer Workspace</a>
-                            </div>
-                        </div>
-                        <div class="terminal-card hero-terminal" aria-label="Profile summary">
-                            <div class="terminal-card-header"><span>profile.json</span><i class="fa-solid fa-shield-halved"></i></div>
-                            <pre>{
-  "name": "Chandan Kumar Sah Teli",
-  "role": "SDE Fresher + AI Builder",
-  "graduation": "B.Tech CSE, 2027",
-  "focus": ["Backend APIs", "Databases", "System Design Basics"],
-  "ai_edge": ["RAG", "LLM Apps", "Agents", "Computer Vision"],
-  "status": "open_to_internship_and_associate_roles"
-}</pre>
-                        </div>
-                    </div>
-                    <div class="metric-strip" aria-label="Portfolio signals">
-                        <div class="metric-card"><span>17+</span><p>public ChandanLabs repos</p></div>
-                        <div class="metric-card"><span>8</span><p>AIFullstack-web lab repos</p></div>
-                        <div class="metric-card"><span>2027</span><p>B.Tech CSE graduation</p></div>
-                        <div class="metric-card"><span>3</span><p>proof lanes: SDE, AI, DSA</p></div>
-                    </div>
-                </section>
+        <section id="about" class="content-section about-section">
+            <div class="section-shell about-layout">
+                <p class="eyebrow">A LITTLE ABOUT ME</p>
+                <div><h2 id="about-heading">Curious about the details that make software dependable.</h2><p id="about-copy">I’m a B.Tech Computer Science student graduating in 2027. I enjoy learning how software behaves, tracing a request through a system, and finding practical ways to make an experience more reliable. I’m currently developing my quality engineering foundation alongside my backend and AI project work.</p></div>
+            </div>
+        </section>
 
-                <section id="proof" class="section">
-                    <div class="section-heading"><p class="prompt">cat proof_of_work.md</p><h2>Fresher profile, real engineering signals.</h2></div>
-                    <div class="proof-grid">
-                        <article class="proof-card"><i class="fa-solid fa-server"></i><h3>Backend API depth</h3><p>REST APIs with Node.js, Express, validation, auth flows, layered structure, and MySQL/MongoDB data modeling.</p></article>
-                        <article class="proof-card"><i class="fa-solid fa-database"></i><h3>Database thinking</h3><p>Event booking uses transactional safety and capacity control, showing attention to correctness, not just CRUD.</p></article>
-                        <article class="proof-card"><i class="fa-solid fa-robot"></i><h3>AI builder edge</h3><p>Projects cover RAG, Gemini/OpenAI integrations, AI agents, real-time vision analysis, and workflow orchestration.</p></article>
-                        <article class="proof-card"><i class="fa-solid fa-code"></i><h3>Problem-solving habit</h3><p>Core CS, DSA practice, Java fundamentals, and coding platform activity support the SDE fresher story.</p></article>
-                    </div>
-                </section>
+        <section id="contact" class="contact-section">
+            <div class="section-shell contact-inner">
+                <div><p class="eyebrow">LET'S CONNECT</p><h2 id="contact-heading">Looking for a curious teammate?</h2><p id="contact-copy">I’m open to entry-level QA automation opportunities and conversations about my projects.</p></div>
+                <div class="contact-actions"><a class="btn primary" href="mailto:chandan.kumar.sah.teli2005@gmail.com">Email Chandan <i class="fa-solid fa-arrow-up-right-from-square"></i></a><a class="btn quiet" data-resume-link href="developer-resume.html">Resume <i class="fa-solid fa-file-arrow-down"></i></a></div>
+            </div>
+        </section>
 
-                <section id="skills" class="section">
-                    <div class="section-heading"><p class="prompt">./list-stack --evidence-first</p><h2>Skills organized by hiring signal.</h2></div>
-                    <div class="skill-board">
-                        <article class="skill-category"><h3>Languages</h3><div class="tag-row"><span>JavaScript</span><span>Java</span><span>Python</span><span>SQL</span></div></article>
-                        <article class="skill-category"><h3>Backend</h3><div class="tag-row"><span>Node.js</span><span>Express</span><span>REST APIs</span><span>JWT Auth</span><span>Joi/Zod Validation</span></div></article>
-                        <article class="skill-category"><h3>Databases</h3><div class="tag-row"><span>MySQL</span><span>MongoDB</span><span>Sequelize</span><span>Firestore</span><span>Redis Basics</span></div></article>
-                        <article class="skill-category"><h3>Systems and Tools</h3><div class="tag-row"><span>Docker</span><span>Git/GitHub</span><span>Linux CLI</span><span>Swagger</span><span>Postman</span></div></article>
-                        <article class="skill-category"><h3>AI Integration</h3><div class="tag-row"><span>Gemini API</span><span>OpenAI API</span><span>RAG</span><span>LangGraph</span><span>Prompt Design</span></div></article>
-                        <article class="skill-category"><h3>Learning Now</h3><div class="tag-row"><span>AWS Basics</span><span>Kubernetes</span><span>System Design</span><span>Data Science</span></div></article>
-                    </div>
-                </section>
-
-                <section id="projects" class="section">
-                    <div class="section-heading with-action"><div><p class="prompt">git log --curated --sde</p><h2>Backend and full-stack projects that show talent.</h2></div><a class="btn small" href="https://github.com/ChandanLabs" target="_blank" rel="noreferrer"><i class="fa-brands fa-github"></i> ChandanLabs</a></div>
-                    <div id="sde-projects" class="projects-grid"></div>
-                </section>
-
-                <section id="console" class="section">
-                    <div class="section-heading"><p class="prompt">curl /api/profile-readiness</p><h2>Interactive recruiter console.</h2></div>
+        <section class="api-secondary" aria-label="Optional API profile preview">
+            <div class="section-shell">
+                <details class="api-console-secondary">
+                    <summary>Optional: explore the portfolio API preview</summary>
                     <div class="api-console">
                         <div class="api-toolbar"><select id="http-method" class="terminal-select" aria-label="HTTP method"><option value="GET">GET</option><option value="POST">POST</option></select><input id="api-endpoint" class="terminal-input-inline" value="/api/profile-readiness" aria-label="API endpoint"><button id="send-request" class="btn primary small" type="button">Send</button></div>
                         <div class="endpoint-list" aria-label="Available endpoints"><button type="button" data-endpoint="/api/profile-readiness">profile-readiness</button><button type="button" data-endpoint="/api/strongest-projects">strongest-projects</button><button type="button" data-endpoint="/api/hire-signal">hire-signal</button></div>
-                        <pre class="response-box"><code id="json-response">// Waiting for request...</code></pre>
+                        <pre class="response-box"><code id="json-response" aria-live="polite">// Waiting for request...</code></pre>
                     </div>
-                </section>
-
-                <section id="contact" class="section">
-                    <div class="section-heading"><p class="prompt">./connect --role internship --role associate-sde</p><h2>Contact and profiles.</h2></div>
-                    <div class="contact-layout">
-                        <form id="contact-form" class="contact-form">
-                            <label>Your email<input id="visitor-email" class="terminal-input" type="email" placeholder="recruiter@company.com"></label>
-                            <label>Message<textarea id="visitor-message" class="terminal-input" rows="5" placeholder="Hi Chandan, I saw your backend and AI projects..."></textarea></label>
-                            <button class="btn primary" type="submit"><i class="fa-solid fa-envelope"></i> Open Email Draft</button>
-                        </form>
-                        <div class="link-matrix">
-                            <a href="mailto:chandan.kumar.sah.teli2005@gmail.com"><i class="fa-solid fa-envelope"></i> Email</a>
-                            <a href="https://linkedin.com/in/chandan-kumar-sah-teli-8718b6364/" target="_blank" rel="noreferrer"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
-                            <a href="https://github.com/ChandanLabs" target="_blank" rel="noreferrer"><i class="fa-brands fa-github"></i> GitHub</a>
-                            <a href="https://leetcode.com/u/ChandanDebugs/" target="_blank" rel="noreferrer"><i class="fa-solid fa-code"></i> LeetCode</a>
-                            <a href="https://www.hackerrank.com/profile/chandan_kumar_s4" target="_blank" rel="noreferrer"><i class="fa-brands fa-hackerrank"></i> HackerRank</a>
-                            <a href="https://www.geeksforgeeks.org/user/chandankumar6qcv/" target="_blank" rel="noreferrer"><i class="fa-solid fa-laptop-code"></i> GFG</a>
-                        </div>
-                    </div>
-                </section>
+                </details>
             </div>
-        </main>
-    </div>
-    <button id="back-to-top" class="back-to-top" type="button" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+        </section>
+    </main>
+
+    <footer class="site-footer" id="site-footer" inert aria-hidden="true"><span>© <span id="footer-year"></span> Chandan Kumar Sah Teli</span><button class="text-link role-switch" type="button" id="footer-change-role">Switch profile</button><a href="#home">Back to top ↑</a></footer>
+    <button class="scroll-top" id="back-to-top" type="button" aria-label="Back to top"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button>
     <script src="script.js"></script>
 </body>
 

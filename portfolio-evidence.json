@@ -1,0 +1,33 @@
+{
+  "highlights": [
+    {
+      "role": "developer",
+      "category": "Hackathon project",
+      "title": "BloodByte",
+      "description": "An AI-assisted emergency blood donation project. The public repository identifies it as a Google Developer Hackathon project; this is project participation, not an award claim.",
+      "url": "https://github.com/ChandanLabs/Bloodyte"
+    },
+    {
+      "role": "developer",
+      "category": "Open-source tool",
+      "title": "ContextSync",
+      "description": "A browser-to-terminal bridge project for moving code, errors, and files into AI coding tools.",
+      "url": "https://github.com/ChandanLabs/-ContextSync"
+    },
+    {
+      "role": "tester",
+      "category": "Automation learning",
+      "title": "Veeva System Training",
+      "description": "A public practice repository for automation engineering topics. The roadmap is presented as learning focus, not completed expertise.",
+      "url": "https://github.com/ChandanLabs/Veeva_System_Training"
+    },
+    {
+      "role": "tester",
+      "category": "Integration test evidence",
+      "title": "OpsGuardian",
+      "description": "A workflow project whose repository identifies Jest and Supertest integration tests alongside human approval gates.",
+      "url": "https://github.com/ChandanLabs/OpsGuardian"
+    }
+  ],
+  "certificates": []
+}
